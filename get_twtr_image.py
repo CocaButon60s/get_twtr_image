@@ -10,6 +10,17 @@ import sys
 
 TL = "https://api.twitter.com/1.1/statuses/user_timeline.json" # タイムライン
 
+class History_Mng:
+    def __init__(self):
+        self.__history = [-1, -2, -3]
+        self.__p = 0
+    def write(self, ID):
+        self.__history[self.__p] = ID
+        np = self.__p + 1
+        if len(self.__history) <= np: self.__p = 0
+        else: self.__p = np
+    def is_same(self): return len(set(self.__history)) == 1
+
 class Param_Mng:
     def __init__(self, userID, count):
         self.__param = {
@@ -19,20 +30,15 @@ class Param_Mng:
             "exclude_replies": False, # その人が返信しているツイートを含むか
             "include_rts": False      # その人がリツイートしているツイートを含むか
         }
+        self.__id_h = History_Mng()
     def update(self, ID):
+        self.__id_h.write(ID)
         self.__param.update({"max_id":ID})
-
     def get_param(self): return self.__param
     def get_endflg(self): return self.__isEnd
+    def is_same_id(self): return self.__id_h.is_same()
 
 def saveContents(timeline, folder, param):
-    """コンテンツを保存する
-
-    Args:
-        timeline ([type]): [description]
-        folder ([type]): [description]
-        param ([type]): [description]
-    """
     # タイムラインから1ツイート分取得
     for content in timeline:
         param.update(content["id"])
@@ -67,6 +73,7 @@ def main():
         timeline = json.loads(res.text)
 
         saveContents(timeline, folder, param)
+        if param.is_same_id():break
         time.sleep(1)
 
 if __name__ == "__main__":
