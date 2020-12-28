@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 requests-oauthlib = "*"
+pyinstaller = "*"
 
 [dev-packages]
 
@@ -13,3 +14,4 @@ python_version = "3.7"
 
 [scripts]
 start = "python get_twtr_image.py"
+build = "pyinstaller --onefile get_twtr_image.py"

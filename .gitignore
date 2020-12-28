@@ -2,3 +2,7 @@ config.py
 __pycache__/
 images/
 .venv/
+build/
+dist/
+get_twtr_image.spec
+get_twtr_image.exe
