@@ -10,18 +10,17 @@ import sys
 
 TL = "https://api.twitter.com/1.1/statuses/user_timeline.json" # タイムライン
 
-class History_Mng:
+class History:
     def __init__(self):
         self.__history = [-1, -2, -3]
         self.__p = 0
     def write(self, ID):
         self.__history[self.__p] = ID
         np = self.__p + 1
-        if len(self.__history) <= np: self.__p = 0
-        else: self.__p = np
+        self.__p = np if len(self.__history) > np else 0
     def is_same(self): return len(set(self.__history)) == 1
 
-class Param_Mng:
+class Param:
     def __init__(self, userID, count):
         self.__param = {
             "screen_name": userID,    # 取得したい人のアカウント名(@を除く)
@@ -30,7 +29,7 @@ class Param_Mng:
             "exclude_replies": False, # その人が返信しているツイートを含むか
             "include_rts": False      # その人がリツイートしているツイートを含むか
         }
-        self.__id_h = History_Mng()
+        self.__id_h = History()
     def update(self, ID):
         self.__id_h.write(ID)
         self.__param.update({"max_id":ID})
@@ -59,7 +58,7 @@ def main():
     if (cnt > 180) or (cnt < 0): sys.exit()
     if (at_once > 200) or (at_once < 0): sys.exit()
     # パラメータ設定
-    param = Param_Mng(userID, at_once)
+    param = Param(userID, at_once)
     # OAuth認証 セッション開始
     twitter = OAuth1Session(CK, CS, AT, AS)
     # 保存するフォルダ
