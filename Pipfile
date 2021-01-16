@@ -4,14 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests-oauthlib = "*"
-pyinstaller = "*"
+tweepy = "*"
+eel = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
 
 [scripts]
-start = "python get_twtr_image.py"
-build = "pyinstaller --onefile get_twtr_image.py"
+init = "pwsh scripts/init.ps1"
+start = "python main.py"
+build = 'python -m eel main.py web/dist --onefile --noconsole'
