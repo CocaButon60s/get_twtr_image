@@ -1,3 +1,4 @@
+mv config_template.py config.py
 pipenv install
 cd web
 npm install
